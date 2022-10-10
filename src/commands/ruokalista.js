@@ -2,9 +2,28 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { fetchMenu } = require('../functions/fetchMenu');
 
 module.exports = {
-	data: new SlashCommandBuilder().setName('ruokalista').setDescription('Palauttaa päivän ruokalistan.'),
+	data: new SlashCommandBuilder()
+		.setName('ruokalista')
+		.setDescription('Palauttaa päivän ruokalistan.')
+		.addStringOption((option) =>
+			option
+				.setName('päivä')
+				.setDescription('Valitse päivä, jonka ruokalista haluat nähdä.')
+				.setRequired(false)
+				.addChoices(
+					{ name: 'Maanantai', value: 'ma' },
+					{ name: 'Tiistai', value: 'ti' },
+					{ name: 'Keskiviikko', value: 'ke' },
+					{ name: 'Torstai', value: 'to' },
+					{ name: 'Perjantai', value: 'pe' },
+				),
+		),
+
 	async execute(interaction) {
-		const menu = (await fetchMenu()).restaurants_tay;
+		const day = interaction.options.getString('päivä');
+
+		const menu = (await fetchMenu(day)).restaurants_tay;
+		const weekDaysShort = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
 		const weekDays = ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai'];
 		const wantedRestaurants = [menu['res_yr'], menu['res_linna'], menu['res_minerva']];
 
@@ -28,7 +47,14 @@ module.exports = {
 			});
 		});
 
-		const dateStr = `${weekDays[new Date().getDay()]} ${new Date().getDate()}.${new Date().getMonth() + 1}.`;
+		let dateStr = '';
+		if (day) {
+			dateStr += `${weekDays[weekDaysShort.indexOf(day)]} ${
+				new Date().getDate() + weekDaysShort.indexOf(day) - new Date().getDay()
+			}.${new Date().getMonth() + 1}.`;
+		} else {
+			dateStr = `${weekDays[new Date().getDay()]} ${new Date().getDate()}.${new Date().getMonth() + 1}.`;
+		}
 
 		const embed = new EmbedBuilder();
 		embed.setTitle(`Ruokalistat ${dateStr}`);

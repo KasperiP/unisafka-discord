@@ -27,11 +27,11 @@ const fetchVersion = async () => {
 	}
 };
 
-const fetchMenu = async () => {
+const fetchMenu = async (day) => {
 	const date = new Date();
 	const version = await fetchVersion();
 	const url = `https://unisafka.fi/static/json/${getYear()}/${getWeekNumber() - 1}/${version}/${
-		weekDays[date.getDay()]
+		day || weekDays[date.getDay()]
 	}.json`;
 
 	try {
