@@ -34,6 +34,17 @@ module.exports = {
 		let minervaStr = '';
 
 		wantedRestaurants.forEach((restaurant) => {
+                        // purukumia mutta toimii
+                        if (restaurant.meals.length === 0) {
+                            if (restaurant.restaurant === "Yliopiston ravintola") {
+                                yrStr = "Ravintola kiinni"
+                            } else if (restaurant.restaurant === "Linna") {
+                                linnaStr = "Ravintola kiinni"                            
+                            } else {
+                                minervaStr = "Ravintola kiinni"                            
+                            }
+                        }
+
 			const mo = restaurant.meals.map((meal) => meal.mo);
 			mo.forEach((meal, index) => {
 				const foodObj = meal.map((food) => food.mpn);
