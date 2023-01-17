@@ -16,6 +16,7 @@ module.exports = {
 					{ name: 'Keskiviikko', value: 'ke' },
 					{ name: 'Torstai', value: 'to' },
 					{ name: 'Perjantai', value: 'pe' },
+                                        { name: 'Lauantai', value: 'la'},
 				),
 		),
 
