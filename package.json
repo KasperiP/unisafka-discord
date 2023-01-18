@@ -1,20 +1,21 @@
 {
-	"name": "unisafka-discord",
-	"version": "1.0.0",
-	"main": "main.js",
-	"license": "MIT",
-	"scripts": {
-		"start": "nodemon ./src/main.js"
-	},
-	"dependencies": {
-		"axios": "^0.27.2",
-		"discord.js": "^14.5.0",
-		"dotenv": "^16.0.2"
-	},
-	"devDependencies": {
-		"eslint": "^8.24.0",
-		"eslint-config-prettier": "^8.5.0",
-		"eslint-plugin-prettier": "^4.2.1",
-		"prettier": "^2.7.1"
-	}
+  "name": "unisafka-discord",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ./src/main.js",
+    "lint": "eslint ./src --ext .js"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "discord.js": "^14.5.0",
+    "dotenv": "^16.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  }
 }
