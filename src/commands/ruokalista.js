@@ -28,11 +28,11 @@ module.exports = {
 		const weekDays = ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai'];
                 const wantedRestaurants = ["res_yr","res_linna","res_minerva"];
 
-                let outputs = {};
-
+                var outputs = new Object();
 		wantedRestaurants.forEach((restaurant) => {
                     const resMenu = menu[restaurant]
-                    //console.log(resMenu);
+                    outputs[resMenu.restaurant] = "";
+                    
                     if (resMenu.meals.length === 0) {
                         outputs[resMenu.restaurant] = "Ravintola kiinni"; 
                     } else {
@@ -58,17 +58,8 @@ module.exports = {
 		embed.setColor('#0099ff');
 
                 Object.entries(outputs).forEach(([res,list]) => {
-                    console.log(res);
-                    console.log(list);
-
                     embed.addFields( { name: res, value: list });
-                });
-
-                /*
-		embed.addFields({ name: 'Yliopiston ravintola', value: yrStr });
-		embed.addFields({ name: 'Linna', value: linnaStr });
-		embed.addFields({ name: 'Minerva', value: minervaStr });
-                */
+                }); 
 
 		embed.setAuthor({ name: 'Unisafka', iconURL: 'https://unisafka.fi/static/logo.png', url: 'https://unisafka.fi/' });
 		embed.setFooter({ text: 'Unisafka', iconURL: 'https://unisafka.fi/static/logo.png' });
