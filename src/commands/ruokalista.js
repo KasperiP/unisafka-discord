@@ -26,38 +26,24 @@ module.exports = {
 		const menu = (await fetchMenu(day)).restaurants_tay;
 		const weekDaysShort = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
 		const weekDays = ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai'];
-		const wantedRestaurants = [menu['res_yr'], menu['res_linna'], menu['res_minerva']];
+                const wantedRestaurants = ["res_yr","res_linna","res_minerva"];
 
-		// TODO: Code below could be made way more cleaner, but
-		// it works so I'm not gonna touch it for now.
-		let yrStr = '';
-		let linnaStr = '';
-		let minervaStr = '';
+                var outputs = new Object();
 
 		wantedRestaurants.forEach((restaurant) => {
-                        // purukumia mutta toimii
-                        if (restaurant.meals.length === 0) {
-                            if (restaurant.restaurant === "Yliopiston ravintola") {
-                                yrStr = "Ravintola kiinni"
-                            } else if (restaurant.restaurant === "Linna") {
-                                linnaStr = "Ravintola kiinni"                            
-                            } else {
-                                minervaStr = "Ravintola kiinni"                            
-                            }
-                        }
-
-			const mo = restaurant.meals.map((meal) => meal.mo);
-			mo.forEach((meal, index) => {
-				const foodObj = meal.map((food) => food.mpn);
-				if (restaurant.restaurant === 'Yliopiston ravintola') {
-					yrStr += `**${index + 1})** ${foodObj.join(', ')}\n`;
-				} else if (restaurant.restaurant === 'Linna') {
-					linnaStr += `**${index + 1})** ${foodObj.join(', ')}\n`;
-				} else {
-					minervaStr += `**${index + 1})** ${foodObj.join(', ')}\n`;
-				}
-			});
-		});
+                    const resMenu = menu[restaurant]
+                    outputs[resMenu.restaurant] = "";
+                    
+                    if (resMenu.meals.length === 0) {
+                        outputs[resMenu.restaurant] = "Ravintola kiinni"; 
+                    } else {
+                        const mo = resMenu.meals.map((meal) => meal.mo)
+                        mo.forEach((meal, index) => {
+                            const foodObj = meal.map((food) => food.mpn)
+                            outputs[resMenu.restaurant] += `**${index + 1})** ${foodObj.join(', ')}\n`
+                        })
+                    }                
+                });
 
 		let dateStr = '';
 		if (day) {
@@ -71,9 +57,11 @@ module.exports = {
 		const embed = new EmbedBuilder();
 		embed.setTitle(`Ruokalistat ${dateStr}`);
 		embed.setColor('#0099ff');
-		embed.addFields({ name: 'Yliopiston ravintola', value: yrStr });
-		embed.addFields({ name: 'Linna', value: linnaStr });
-		embed.addFields({ name: 'Minerva', value: minervaStr });
+
+                Object.entries(outputs).forEach(([res,list]) => {
+                    embed.addFields( { name: res, value: list });
+                }); 
+
 		embed.setAuthor({ name: 'Unisafka', iconURL: 'https://unisafka.fi/static/logo.png', url: 'https://unisafka.fi/' });
 		embed.setFooter({ text: 'Unisafka', iconURL: 'https://unisafka.fi/static/logo.png' });
 		embed.setTimestamp();
