@@ -29,6 +29,7 @@ module.exports = {
                 const wantedRestaurants = ["res_yr","res_linna","res_minerva"];
 
                 var outputs = new Object();
+
 		wantedRestaurants.forEach((restaurant) => {
                     const resMenu = menu[restaurant]
                     outputs[resMenu.restaurant] = "";
