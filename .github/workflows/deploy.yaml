@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: ['master']
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd unisafka-discord
+            rm -rf unisafka-discord
+            git clone https://github.com/KasperiP/unisafka-discord.git
+            cp .env unisafka-discord/.env
+            cd unisafka-discord
+            docker stop unisafka-discord
+            docker rm unisafka-discord
+            docker build -t unisafka-discord .
+            docker run -d --restart=always --name unisafka-discord unisafka-discord
